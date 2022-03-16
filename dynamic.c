@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
 
     if (myRank == MASTER)
     {
-        //////////////////////////////////////////// Master ///////////////////////////////////////////////////
         double *points;
         double *answerFromSlave;
         int numberOfPoints, tag, extra = 0;
@@ -95,14 +94,13 @@ int main(int argc, char *argv[])
                 y = points[i + 1];
             }
         }
+        free(answerFromSlave);
         printf("\nTime: %e\n", MPI_Wtime() - t1);
         printf("Answer = %e\n", maxFromSlave);
     }
-    //////////////////////////////////////////// Master ///////////////////////////////////////////////////
 
     else
     {
-        /////////////////////////////////////////// Slaves //////////////////////////////////////////////////
         while (1)
         {
             double *slaveData;
@@ -133,7 +131,7 @@ int main(int argc, char *argv[])
             MPI_Send(&answerToMaster, 1, MPI_DOUBLE, MASTER, tag, MPI_COMM_WORLD);
             if (tag == STOP_TAG)
                 break;
-            // TODO release array  slaveData
+            free(slaveData);
         }
         ///////////////////////////////////////// Slaves //////////////////////////////////////////////
     }
