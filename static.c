@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
     MPI_Comm_size(MPI_COMM_WORLD, &numProcsses);
 
-    /////////////////////////////// Work //////////////////////////////////////////////////
 
     // master read the pointes from file
     if (myRank == MASTER)
@@ -39,7 +38,6 @@ int main(int argc, char *argv[])
         t1 = MPI_Wtime();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // to update all the process include the master the number of Points and parms
     MPI_Bcast(&numberOfPointArr, 1, MPI_INT, MASTER, MPI_COMM_WORLD);
@@ -63,14 +61,13 @@ int main(int argc, char *argv[])
             answer = fmax(answer, heavy(x, y, param));
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         MPI_Gather(&answer, 1, MPI_DOUBLE, getDataFromSlave + numProcsses * indexMaster, 1, MPI_DOUBLE, MASTER, MPI_COMM_WORLD);
         indexMaster++;
         finishTask += (splitSize * numProcsses);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    
     if (myRank == MASTER)
     {
         double maxFromSlave = getDataFromSlave[0];
@@ -87,6 +84,7 @@ int main(int argc, char *argv[])
         {
             maxFromSlave = fmax(maxFromSlave, getDataFromSlave[i]);
         }
+        free(getDataFromSlave);
         printf("Time: %e\n", MPI_Wtime() - t1);
         printf("Answer: %e\n", maxFromSlave);
     }
