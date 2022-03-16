@@ -133,7 +133,6 @@ int main(int argc, char *argv[])
                 break;
             free(slaveData);
         }
-        ///////////////////////////////////////// Slaves //////////////////////////////////////////////
     }
 
     MPI_Finalize();
